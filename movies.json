@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Inception",
+    "director": "Christopher Nolan",
+    "year": 2010,
+    "genre": "Sci-Fi"
+  },
+  {
+    "title": "Spirited Away",
+    "director": "Hayao Miyazaki",
+    "year": 2001,
+    "genre": "Animation"
+  },
+  {
+    "title": "La La Land",
+    "director": "Damien Chazelle",
+    "year": 2016,
+    "genre": "Musical"
+  }
+]

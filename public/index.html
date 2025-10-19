@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contactos API</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>📇 Contact List</h1>
+
+    <button id="loadContactsBtn">🔄 Load contacts</button>
+
+    <ul id="contactList"></ul>
+
+    <h2>➕ Add new contact</h2>
+    <form id="contactForm">
+      <input type="text" id="firstName" placeholder="Name" required />
+      <input type="text" id="lastName" placeholder="Last Name" required />
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="text" id="favoriteColor" placeholder="Favorite Color" required />
+      <input type="text" id="birthday" placeholder="Birthday (MM/DD/YY)" required />
+      <button type="submit">Save</button>
+    </form>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

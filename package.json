@@ -1,0 +1,32 @@
+{
+  "name": "w05-cse341-personal",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "swagger": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/melanyvlm/w05-cse341-personal.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/melanyvlm/w05-cse341-personal/issues"
+  },
+  "homepage": "https://github.com/melanyvlm/w05-cse341-personal#readme",
+  "description": "",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "mongodb": "^6.20.0",
+    "swagger-autogen": "^2.23.7",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
