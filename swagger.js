@@ -1,6 +1,5 @@
 // swagger.js
-const swaggerUi = require("swagger-ui-express");
-const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerJSDoc = require("swagger-jsdoc");
 
 const options = {
   definition: {
@@ -8,25 +7,21 @@ const options = {
     info: {
       title: "Movies API",
       version: "1.0.0",
-      description: "API documentation for the Movies project",
+      description: "API documentation for your Movies project",
     },
     servers: [
       {
+        url: "https://w05-cse341-personal.onrender.com",
+        description: "Production server",
+      },
+      {
         url: "http://localhost:3000",
+        description: "Local server",
       },
     ],
   },
-  apis: ["./routes/*.js"], // buscará comentarios Swagger en tus rutas
+  apis: ["./routes/*.js"], // <== Aquí Swagger leerá tus anotaciones
 };
 
-const swaggerSpec = swaggerJsdoc(options);
-
-function setupSwagger(app) {
-  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-  app.get("/swagger.json", (req, res) => {
-    res.setHeader("Content-Type", "application/json");
-    res.send(swaggerSpec);
-  });
-}
-
-module.exports = { setupSwagger };
+const swaggerSpec = swaggerJSDoc(options);
+module.exports = swaggerSpec;
