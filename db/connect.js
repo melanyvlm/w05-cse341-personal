@@ -6,31 +6,27 @@ let _db;
 
 const initDb = (callback) => {
   if (_db) {
-    console.log('📦 Database is already initialized!');
+    console.log('Db is already initialized!');
     return callback(null, _db);
   }
 
   MongoClient.connect(process.env.MONGODB_URI)
     .then((client) => {
-      // Aquí seleccionas tu base de datos (la parte después del / en la URI)
-      _db = client.db('movies');
-      console.log('✅ Connected to MongoDB Atlas!');
+      // ✅ Guarda la base de datos directamente
+      _db = client.db(process.env.MONGODB_DBNAME); 
+      console.log('Database connected!');
       callback(null, _db);
     })
     .catch((err) => {
-      console.error('❌ Error connecting to MongoDB:', err);
       callback(err);
     });
 };
 
 const getDb = () => {
   if (!_db) {
-    throw Error('Database not initialized!');
+    throw Error('Db not initialized');
   }
   return _db;
 };
 
-module.exports = {
-  initDb,
-  getDb,
-};
+module.exports = { initDb, getDb };

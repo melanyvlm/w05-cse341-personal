@@ -1,95 +1,104 @@
-const { getDb } = require("../db/connect");
-const { ObjectId } = require("mongodb");
+// controllers/movies.js
+const mongodb = require("../db/connect");
+const ObjectId = require("mongodb").ObjectId;
 
-// 📌 Obtener todas las películas
-const getAll = async (req, res) => {
+// ✅ GET all movies
+const getAllMovies = async (req, res) => {
   try {
-    const db = getDb();
-    const movies = await db.collection("movies").find().toArray();
+    const result = await mongodb.getDb().collection("movies").find();
+    const movies = await result.toArray();
     res.status(200).json(movies);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching movies: " + error.message });
   }
 };
 
-// 📌 Obtener una película por ID
-const getById = async (req, res) => {
+// ✅ GET one movie by ID
+const getSingleMovie = async (req, res) => {
   try {
-    const db = getDb();
-    const id = new ObjectId(req.params.id);
-    const movie = await db.collection("movies").findOne({ _id: id });
+    const id = req.params.id;
+    if (!ObjectId.isValid(id))
+      return res.status(400).json({ error: "Invalid movie ID format" });
 
-    if (!movie) {
-      return res.status(404).json({ message: "Movie not found" });
-    }
+    const movie = await mongodb
+      .getDb()
+      .collection("movies")
+      .findOne({ _id: new ObjectId(id) });
 
+    if (!movie) return res.status(404).json({ error: "Movie not found" });
     res.status(200).json(movie);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching movie: " + error.message });
   }
 };
 
-// 📌 Crear una nueva película
+// ✅ POST create movie
 const createMovie = async (req, res) => {
   try {
-    const db = getDb();
     const { title, director, year, genre } = req.body;
 
+    // Basic validation
     if (!title || !director || !year || !genre) {
-      return res.status(400).json({ message: "All fields are required" });
+      return res.status(400).json({ error: "All fields are required" });
     }
 
-    const result = await db.collection("movies").insertOne({
-      title,
-      director,
-      year,
-      genre,
-    });
+    const newMovie = { title, director, year, genre };
+    const response = await mongodb.getDb().collection("movies").insertOne(newMovie);
 
-    res.status(201).json(result);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    if (response.acknowledged) res.status(201).json(response);
+    else res.status(500).json({ error: "Failed to create movie" });
+  } catch (error) {
+    res.status(500).json({ error: "Error creating movie: " + error.message });
   }
 };
 
-// 📌 Actualizar una película
+// ✅ PUT update movie
 const updateMovie = async (req, res) => {
   try {
-    const db = getDb();
-    const id = new ObjectId(req.params.id);
+    const id = req.params.id;
+    if (!ObjectId.isValid(id))
+      return res.status(400).json({ error: "Invalid movie ID format" });
+
     const { title, director, year, genre } = req.body;
+    if (!title || !director || !year || !genre)
+      return res.status(400).json({ error: "All fields are required" });
 
-    const result = await db.collection("movies").updateOne(
-      { _id: id },
-      { $set: { title, director, year, genre } }
-    );
+    const movie = { title, director, year, genre };
+    const response = await mongodb
+      .getDb()
+      .collection("movies")
+      .updateOne({ _id: new ObjectId(id) }, { $set: movie });
 
-    if (result.modifiedCount === 0) {
-      return res.status(404).json({ message: "Movie not found or not modified" });
-    }
-
-    res.status(204).send();
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    if (response.modifiedCount > 0) res.status(204).send();
+    else res.status(404).json({ error: "Movie not found or not updated" });
+  } catch (error) {
+    res.status(500).json({ error: "Error updating movie: " + error.message });
   }
 };
 
-// 📌 Eliminar una película
+// ✅ DELETE movie
 const deleteMovie = async (req, res) => {
   try {
-    const db = getDb();
-    const id = new ObjectId(req.params.id);
+    const id = req.params.id;
+    if (!ObjectId.isValid(id))
+      return res.status(400).json({ error: "Invalid movie ID format" });
 
-    const result = await db.collection("movies").deleteOne({ _id: id });
+    const response = await mongodb
+      .getDb()
+      .collection("movies")
+      .deleteOne({ _id: new ObjectId(id) });
 
-    if (result.deletedCount === 0) {
-      return res.status(404).json({ message: "Movie not found" });
-    }
-
-    res.status(204).send();
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    if (response.deletedCount > 0) res.status(200).send();
+    else res.status(404).json({ error: "Movie not found" });
+  } catch (error) {
+    res.status(500).json({ error: "Error deleting movie: " + error.message });
   }
 };
 
-module.exports = { getAll, getById, createMovie, updateMovie, deleteMovie };
+module.exports = {
+  getAllMovies,
+  getSingleMovie,
+  createMovie,
+  updateMovie,
+  deleteMovie,
+};

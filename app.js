@@ -20,7 +20,7 @@ const swaggerOptions = {
       version: "1.0.0",
       description: "API documentation for the Movies database project",
     },
-    servers: [{ url: "http://localhost:3000" }],
+    servers: [{ url: process.env.RENDER_URL || "http://localhost:3000" }],
   },
   apis: ["./routes/*.js"],
 };
