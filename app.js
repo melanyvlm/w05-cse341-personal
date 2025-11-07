@@ -54,20 +54,27 @@ passport.deserializeUser((user, done) => {
 });
 
 // 🏠 Página principal
+// 🏠 Página principal
 app.get("/", (req, res) => {
   if (req.isAuthenticated()) {
     res.send(`
-      <h1>🎬 Bienvenida, ${req.user.displayName}!</h1>
-      <p><a href="/movies">Ver películas</a></p>
-      <p><a href="/logout">Cerrar sesión</a></p>
+      <h1>🎬 Welcome, ${req.user.displayName}!</h1>
+      <nav>
+        <ul>
+          <li><a href="/movies">Waatch movies</a></li>
+          <li><a href="/logout">Sign out</a></li>
+        </ul>
+      </nav>
     `);
   } else {
     res.send(`
       <h1>Welcome to the Movies API 🎥</h1>
-      <p><a href="/auth/google"Sign in with Google</a></p>
+      <p>To continue, please sign in:</p>
+      <a href="/auth/google">Sign in with Google</a>
     `);
   }
 });
+
 
 app.get("/logout", (req, res, next) => {
   req.logout((err) => {
